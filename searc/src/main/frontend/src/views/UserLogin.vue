@@ -29,18 +29,16 @@ export default {
   },
   methods: {
     login() {
-      this.error = '';  // Reset error message before a new login attempt
-      // Assuming your Vue app is served from the same domain as your backend
+      this.error = '';  // 在尝试新的登录之前重置错误消息
       this.$http.post('/login', {
         username: this.username,
         password: this.password
-      }).then(response => {
-        if (response.data === 'redirect:/home') {
-          // Handle your redirection here instead of relying on the backend response
-          this.$router.push('/home');
-        }
+      }).then(() => {
+        // 如果没有返回错误则认为登录成功
+        this.$store.commit('setUsername', this.username);  // Store username in Vuex
+        this.$router.push('/home');
       }).catch(error => {
-        // Error handling, showing error message if login is invalid
+        // 错误处理，如果登录无效则显示错误消息
         if (error.response && error.response.status === 401) {
           this.error = 'Invalid username or password.';
         } else {

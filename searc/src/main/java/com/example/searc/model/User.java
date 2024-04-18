@@ -16,7 +16,7 @@ public class User {
     @Column(nullable = false, length = 64) // 密码长度足够存储加密后的密码
     private String userPassword;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "diaryAuthor")
     private Set<Diary> diaries = new HashSet<>();
 
     // Getter和Setter方法

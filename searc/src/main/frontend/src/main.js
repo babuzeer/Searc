@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import Axios from 'axios';
 import router from './router';
+import store from './store';
 
 Vue.prototype.$http = Axios;
 Vue.config.productionTip = false

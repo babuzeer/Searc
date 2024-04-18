@@ -1,14 +1,16 @@
 package com.example.searc.controller;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.searc.service.UserService;
 
 @Controller
+@RequestMapping("/api")
 public class UserController {
 
     private final UserService userService;
@@ -23,14 +25,15 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String loginUser(@RequestParam String username, @RequestParam String password, Model model) {
+    public String loginUser(@RequestParam String username, @RequestParam String password, RedirectAttributes redirectAttributes) {
         boolean isValidUser = userService.validateUser(username, password);
         
         if (isValidUser) {
-            return "redirect:/home"; // Redirect to a secured page or home page
+            // 可以在这里设置会话属性
+            return "redirect:/home";
         } else {
-            model.addAttribute("error", "Invalid username or password.");
-            return "login";
+            redirectAttributes.addFlashAttribute("error", "Invalid username or password.");
+            return "redirect:/login"; // 使用重定向而不是直接返回视图
         }
     }
 }
