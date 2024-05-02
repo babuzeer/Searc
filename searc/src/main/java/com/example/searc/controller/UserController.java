@@ -1,15 +1,10 @@
 package com.example.searc.controller;
-
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
+import com.example.searc.dto.UserLoginDTO;
 import com.example.searc.service.UserService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+@RestController
 @RequestMapping("/api")
 public class UserController {
 
@@ -19,21 +14,21 @@ public class UserController {
         this.userService = userService;
     }
 
+    
+
     @GetMapping("/login")
-    public String showLoginForm() {
-        return "login";
+    public ResponseEntity<?> showLoginForm() {
+        return ResponseEntity.ok("Please login.");
     }
 
     @PostMapping("/login")
-    public String loginUser(@RequestParam String username, @RequestParam String password, RedirectAttributes redirectAttributes) {
-        boolean isValidUser = userService.validateUser(username, password);
+    public ResponseEntity<?> loginUser(@RequestBody UserLoginDTO userLoginDTO) {
+        boolean isValidUser = userService.validateUser(userLoginDTO.getUsername(), userLoginDTO.getPassword());
         
         if (isValidUser) {
-            // 可以在这里设置会话属性
-            return "redirect:/home";
+            return ResponseEntity.ok("Login successful. Redirecting to home.");
         } else {
-            redirectAttributes.addFlashAttribute("error", "Invalid username or password.");
-            return "redirect:/login"; // 使用重定向而不是直接返回视图
+            return ResponseEntity.badRequest().body("Invalid username or password.");
         }
     }
 }

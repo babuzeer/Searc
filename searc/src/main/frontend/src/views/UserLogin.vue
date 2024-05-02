@@ -19,6 +19,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   data() {
     return {
@@ -29,16 +31,18 @@ export default {
   },
   methods: {
     login() {
-      this.error = '';  // 在尝试新的登录之前重置错误消息
-      this.$http.post('/login', {
+      this.error = '';  // Reset error message before a new login attempt
+      axios.post('/api/login', {
         username: this.username,
         password: this.password
-      }).then(() => {
-        // 如果没有返回错误则认为登录成功
-        this.$store.commit('setUsername', this.username);  // Store username in Vuex
-        this.$router.push('/home');
+      })
+    .then(response => {
+        if (response.data === "Login successful. Redirecting to home.") {
+          this.$router.push('/home');  // Redirect to home route
+        } else {
+          this.error = response.data;  // Show the server returned error message
+        }
       }).catch(error => {
-        // 错误处理，如果登录无效则显示错误消息
         if (error.response && error.response.status === 401) {
           this.error = 'Invalid username or password.';
         } else {
