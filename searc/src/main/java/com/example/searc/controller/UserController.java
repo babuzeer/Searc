@@ -1,5 +1,6 @@
 package com.example.searc.controller;
 import com.example.searc.dto.UserLoginDTO;
+import com.example.searc.dto.UserRegistrationDTO;
 import com.example.searc.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,5 +31,21 @@ public class UserController {
         } else {
             return ResponseEntity.badRequest().body("Invalid username or password.");
         }
+    }
+    
+    @PostMapping("/register")
+    public ResponseEntity<?> registerUser(@RequestBody UserRegistrationDTO registrationDTO) {
+        boolean userExists = userService.userExists(registrationDTO.getUsername());
+        if (userExists) {
+            return ResponseEntity.badRequest().body("Error: Username is already taken!");
+        }
+        
+        boolean emailExists = userService.emailExists(registrationDTO.getEmail());
+        if (emailExists) {
+            return ResponseEntity.badRequest().body("Error: Email is already registered!");
+        }
+
+        userService.createUser(registrationDTO);
+        return ResponseEntity.ok("User registered successfully");
     }
 }

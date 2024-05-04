@@ -4,7 +4,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users", uniqueConstraints = {
+    @UniqueConstraint(columnNames = "username"),
+    @UniqueConstraint(columnNames = "email")  // 确保电子邮件唯一
+})
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,6 +18,9 @@ public class User {
 
     @Column(nullable = false, length = 64) // 密码长度足够存储加密后的密码
     private String userPassword;
+
+    @Column(nullable = false, unique = true, length = 50) // 添加电子邮件字段
+    private String email;
 
     @OneToMany(mappedBy = "diaryAuthor")
     private Set<Diary> diaries = new HashSet<>();
@@ -33,7 +39,7 @@ public class User {
     }
 
     public void setUserPassword(String userPassword) {
-        this.userPassword = userPassword; // 仅设置密码，不加密
+        this.userPassword = userPassword;
     }
 
     public Long getId() {
@@ -42,6 +48,14 @@ public class User {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     // 关联其他实体的方法等...

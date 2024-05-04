@@ -1,7 +1,7 @@
 <template>
   <div class="login-container">
     <h1>Login</h1>
-    <form @submit.prevent="login">
+    <form @submit.prevent="performLogin">
       <div>
         <label for="username">Username:</label>
         <input id="username" v-model="username" type="text" required>
@@ -18,8 +18,10 @@
   </div>
 </template>
 
+
 <script>
 import axios from 'axios';
+import { mapActions } from 'vuex';
 
 export default {
   data() {
@@ -30,14 +32,15 @@ export default {
     };
   },
   methods: {
-    login() {
+    ...mapActions(['login']),
+    performLogin() {
       this.error = '';  // Reset error message before a new login attempt
       axios.post('/api/login', {
         username: this.username,
         password: this.password
-      })
-    .then(response => {
+      }).then(response => {
         if (response.data === "Login successful. Redirecting to home.") {
+          this.login({ username: this.username, isAuthenticated: true });
           this.$router.push('/home');  // Redirect to home route
         } else {
           this.error = response.data;  // Show the server returned error message
