@@ -1,15 +1,15 @@
 package com.example.searc.model;
-
 import jakarta.persistence.*;
+
 @Entity
-@Table(name = "labels")
-public class Label {
+@Table(name = "internal_maps")
+public class InternalMap {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String name;
+    @Column(nullable = false)
+    private String mapData;
 
-    // 省略了getters和setters
+    // Getters and setters
 }

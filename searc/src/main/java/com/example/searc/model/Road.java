@@ -1,5 +1,4 @@
 package com.example.searc.model;
-
 import jakarta.persistence.*;
 
 @Entity
@@ -9,23 +8,19 @@ public class Road {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Integer roadDistance;
-    private Double roadCrowd;
-    
     @ManyToOne
-    @JoinColumn(name = "source_place_id")
-    private Place sourcePlace;
+    @JoinColumn(name = "start_location_id", referencedColumnName = "id")
+    private Location startLocation;
 
     @ManyToOne
-    @JoinColumn(name = "dest_place_id")
-    private Place destPlace;
+    @JoinColumn(name = "end_location_id", referencedColumnName = "id")
+    private Location endLocation;
 
-    @ManyToOne
-    @JoinColumn(name = "source_innerplace_id")
-    private InnerPlace sourceInnerPlace;
+    @Column(nullable = false)
+    private Double length;
 
-    @ManyToOne
-    @JoinColumn(name = "dest_innerplace_id")
-    private InnerPlace destinationInnerPlace;
-    // getters and setters
+    @Column(nullable = false)
+    private Double congestionLevel;
+
+    // Getters and setters
 }
