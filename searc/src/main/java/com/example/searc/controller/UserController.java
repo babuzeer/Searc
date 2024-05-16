@@ -25,7 +25,6 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody UserLoginDTO userLoginDTO) {
         boolean isValidUser = userService.validateUser(userLoginDTO.getUsername(), userLoginDTO.getPassword());
-        
         if (isValidUser) {
             return ResponseEntity.ok("Login successful. Redirecting to home.");
         } else {
@@ -44,7 +43,6 @@ public class UserController {
         if (emailExists) {
             return ResponseEntity.badRequest().body("Error: Email is already registered!");
         }
-
         userService.createUser(registrationDTO);
         return ResponseEntity.ok("User registered successfully");
     }

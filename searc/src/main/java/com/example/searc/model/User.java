@@ -1,7 +1,8 @@
 package com.example.searc.model;
 import jakarta.persistence.*;
+
+import java.util.Set;
 // import java.util.HashSet;
-// import java.util.Set;
 
 @Entity
 @Table(name = "users", uniqueConstraints = {
@@ -21,9 +22,6 @@ public class User {
 
     @Column(nullable = false, unique = true, length = 50) // 添加电子邮件字段
     private String email;
-
-    // @OneToMany(mappedBy = "diaryAuthor")
-    // private Set<Diary> diaries = new HashSet<>();
 
     // Getter和Setter方法
     public String getUsername() {
